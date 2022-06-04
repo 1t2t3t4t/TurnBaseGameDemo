@@ -8,6 +8,7 @@
 #include "Components/HorizontalBox.h"
 #include "Components/TextBlock.h"
 #include "Engine/AssetManager.h"
+#include "Kismet/GameplayStatics.h"
 #include "TurnBaseDemo/Character/CharacterData.h"
 
 void UCharacterSelectionWidget::NativeConstruct()
@@ -45,6 +46,11 @@ void UCharacterSelectionWidget::OnLoadedCharacterAssets()
 	{
 		EnemyCharactersPanel->AddChild(Button);
 	}
+}
+
+void UCharacterSelectionWidget::OnStartPlayTapped()
+{
+	
 }
 
 TArray<UButton*> UCharacterSelectionWidget::CreateCharacterButtons(const ESelectionType Type) const

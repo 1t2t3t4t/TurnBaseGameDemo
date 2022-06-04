@@ -24,10 +24,13 @@ ABaseCharacter::ABaseCharacter()
 
 void ABaseCharacter::LoadCharacter(UCharacterData* CharacterData)
 {
-	const auto SkeletalMesh = CharacterData->SkeletalMesh.LoadSynchronous();
-	const auto AnimBP = CharacterData->AnimBlueprintClass.LoadSynchronous();
-	SkeletalMeshComponent->SetSkeletalMesh(SkeletalMesh);
-	SkeletalMeshComponent->SetAnimClass(AnimBP);
+	if (CharacterData)
+	{
+		const auto SkeletalMesh = CharacterData->SkeletalMesh.LoadSynchronous();
+		const auto AnimBP = CharacterData->AnimBlueprintClass.LoadSynchronous();
+		SkeletalMeshComponent->SetSkeletalMesh(SkeletalMesh);
+		SkeletalMeshComponent->SetAnimClass(AnimBP);
+	}
 }
 
 // Called when the game starts or when spawned

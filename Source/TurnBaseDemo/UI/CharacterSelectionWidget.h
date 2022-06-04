@@ -25,7 +25,7 @@ class TURNBASEDEMO_API UCharacterSelectionWidget : public UUserWidget
 public:
 	UPROPERTY(VisibleAnywhere)
 	TArray<UCharacterData*> CharacterSelections;
-
+	
 	UPROPERTY(EditAnywhere, meta=(BindWidget))
 	UHorizontalBox* PlayerCharactersPanel;
 	
@@ -40,6 +40,9 @@ public:
 
 	virtual void NativeConstruct() override;
 	void OnLoadedCharacterAssets();
+
+	UFUNCTION(BlueprintCallable)
+	void OnStartPlayTapped();
 
 private:
 	TArray<UButton*> CreateCharacterButtons(const ESelectionType Type) const;
