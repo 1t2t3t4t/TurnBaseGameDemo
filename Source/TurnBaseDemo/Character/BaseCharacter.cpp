@@ -3,8 +3,8 @@
 
 #include "BaseCharacter.h"
 
-#include "LerpTransitionComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "TurnBaseDemo/Component/LerpTransitionComponent.h"
 
 
 // Sets default values

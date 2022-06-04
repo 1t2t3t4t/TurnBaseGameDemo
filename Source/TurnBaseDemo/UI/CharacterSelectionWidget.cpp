@@ -8,7 +8,7 @@
 #include "Components/HorizontalBox.h"
 #include "Components/TextBlock.h"
 #include "Engine/AssetManager.h"
-#include "TurnBaseDemo/CharacterData.h"
+#include "TurnBaseDemo/Character/CharacterData.h"
 
 void UCharacterSelectionWidget::NativeConstruct()
 {
