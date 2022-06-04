@@ -15,6 +15,8 @@ class TURNBASEDEMO_API UCharacterData : public UDataAsset
 	GENERATED_BODY()
 
 public:
+	static FPrimaryAssetType AssetType;
+	
 	UPROPERTY(EditDefaultsOnly, Category=Info)
 	FText Name;
 	

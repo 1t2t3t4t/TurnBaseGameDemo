@@ -5,17 +5,45 @@
 
 #include "Blueprint/WidgetTree.h"
 #include "Components/Button.h"
-#include "Components/GridPanel.h"
+#include "Components/HorizontalBox.h"
 #include "Components/TextBlock.h"
+#include "Engine/AssetManager.h"
 #include "TurnBaseDemo/CharacterData.h"
 
 void UCharacterSelectionWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	auto Btns = CreateCharacterButtons(ESelectionType::Player);
-	for (auto b : Btns)
+	UAssetManager& AssetManager = UAssetManager::Get();
+	TArray<FPrimaryAssetId> AssetIds;
+	AssetManager.GetPrimaryAssetIdList(UCharacterData::AssetType, AssetIds);
+
+	const auto Delegate = FStreamableDelegate::CreateUObject(this, &UCharacterSelectionWidget::OnLoadedCharacterAssets);
+	AssetManager.LoadPrimaryAssets(AssetIds, {}, Delegate);
+}
+
+void UCharacterSelectionWidget::OnLoadedCharacterAssets()
+{
+	TArray<UObject*> DataList;
+	UAssetManager::Get().GetPrimaryAssetObjectList(UCharacterData::AssetType, DataList);
+	CharacterSelections.Reset();
+	for (const auto Data : DataList)
 	{
-		PlayerCharactersPanel->AddChild(b);
+		if (UCharacterData* CharacterData = Cast<UCharacterData>(Data))
+		{
+			CharacterSelections.Add(CharacterData);
+		}
+	}
+	
+	UserButtons = CreateCharacterButtons(ESelectionType::Player);
+	for (const auto Button : UserButtons)
+	{
+		PlayerCharactersPanel->AddChild(Button);
+	}
+
+	EnemyButtons = CreateCharacterButtons(ESelectionType::Enemy);
+	for (const auto Button : EnemyButtons)
+	{
+		EnemyCharactersPanel->AddChild(Button);
 	}
 }
 

@@ -9,6 +9,7 @@
 class UCharacterData;
 class UButton;
 class UGridPanel;
+class UHorizontalBox;
 
 enum class ESelectionType : uint8
 {
@@ -22,14 +23,24 @@ class TURNBASEDEMO_API UCharacterSelectionWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	TArray<UCharacterData*> CharacterSelections;
 
 	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UGridPanel* PlayerCharactersPanel;
+	UHorizontalBox* PlayerCharactersPanel;
+	
+	UPROPERTY(EditAnywhere, meta=(BindWidget))
+	UHorizontalBox* EnemyCharactersPanel;
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<UButton*> UserButtons;
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<UButton*> EnemyButtons;
 
 	virtual void NativeConstruct() override;
-	
+	void OnLoadedCharacterAssets();
+
 private:
 	TArray<UButton*> CreateCharacterButtons(const ESelectionType Type) const;
 };

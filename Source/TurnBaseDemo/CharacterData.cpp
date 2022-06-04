@@ -2,3 +2,5 @@
 
 
 #include "CharacterData.h"
+
+FPrimaryAssetType UCharacterData::AssetType = TEXT("Characters");
