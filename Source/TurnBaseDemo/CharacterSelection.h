@@ -3,11 +3,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UI/CharacterSelectionWidget.h"
 #include "UObject/Object.h"
 #include "CharacterSelection.generated.h"
 
-UCLASS()
+class UCharacterData;
+
+UCLASS(BlueprintType)
 class TURNBASEDEMO_API UCharacterSelection : public UObject
 {
 	GENERATED_BODY()
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	TMap<ESelectionType, UCharacterData*> Selections;
+	
+public:
+	TMap<ESelectionType, UCharacterData*> GetSelections() const
+	{
+		return Selections;
+	}
+
+	void SetSelections(const TMap<ESelectionType, UCharacterData*> NewSelections)
+	{
+		this->Selections = NewSelections;
+	}
 };

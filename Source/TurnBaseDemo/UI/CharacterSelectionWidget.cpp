@@ -3,12 +3,14 @@
 
 #include "CharacterSelectionWidget.h"
 
+#include "CharacterSelectionButton.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
 #include "Components/TextBlock.h"
 #include "Engine/AssetManager.h"
-#include "Kismet/GameplayStatics.h"
+#include "TurnBaseDemo/CharacterSelection.h"
+#include "TurnBaseDemo/TurnBaseDemoGameInstance.h"
 #include "TurnBaseDemo/Character/CharacterData.h"
 
 void UCharacterSelectionWidget::NativeConstruct()
@@ -50,20 +52,35 @@ void UCharacterSelectionWidget::OnLoadedCharacterAssets()
 
 void UCharacterSelectionWidget::OnStartPlayTapped()
 {
-	
+	UE_LOG(LogTemp, Display, TEXT("Abt to start"));
+	UCharacterSelection* Selection = NewObject<UCharacterSelection>();
+	Selection->SetSelections(Selections);
+	const auto GameInstance = Cast<UTurnBaseDemoGameInstance>(GetGameInstance());
+	GameInstance->SetCharacterSelection(Selection);
 }
 
-TArray<UButton*> UCharacterSelectionWidget::CreateCharacterButtons(const ESelectionType Type) const
+TArray<UCharacterSelectionButton*> UCharacterSelectionWidget::CreateCharacterButtons(const ESelectionType Type)
 {
-	TArray<UButton*> Result;
+	TArray<UCharacterSelectionButton*> Result;
 	for (const auto Character : CharacterSelections)
 	{
-		auto Button = WidgetTree->ConstructWidget<UButton>();
+		UCharacterSelectionButton* Button = WidgetTree->ConstructWidget<UCharacterSelectionButton>();
+		
+		Button->Data = Character;
+		Button->SelectionType = Type;
+		Button->OnCharacterSelected.AddUniqueDynamic(this, &UCharacterSelectionWidget::OnCharacterSelectionTapped);
+
 		const auto Text = WidgetTree->ConstructWidget<UTextBlock>();
 		Text->SetText(Character->Name);
 		Button->SetContent(Text);
+		
 		Result.Add(Button);
 	}
-
+	
 	return Result;
+}
+
+void UCharacterSelectionWidget::OnCharacterSelectionTapped(UCharacterSelectionButton* Button)
+{
+	Selections.Add(Button->SelectionType, Button->Data);
 }

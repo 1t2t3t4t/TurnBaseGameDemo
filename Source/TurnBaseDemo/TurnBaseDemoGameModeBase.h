@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterSelection.h"
+#include "TurnBaseDemoGameInstance.h"
 #include "GameFramework/GameModeBase.h"
 #include "TurnBaseDemoGameModeBase.generated.h"
 
@@ -21,9 +23,13 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TArray<AActor*> EnemyPositions;
 
+	UPROPERTY(VisibleAnywhere)
+	UCharacterSelection* Selections;
+
 	virtual void BeginPlay() override;
 
 	static AActor* GetEmptyOwnerActor(TArray<AActor*> Actors);
+	UTurnBaseDemoGameInstance* GetTurnBaseGameInstance() const;
 
 	AActor* GetEmptyPlayerLocation() const
 	{

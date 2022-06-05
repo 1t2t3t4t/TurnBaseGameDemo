@@ -7,10 +7,11 @@
 #include "CharacterSelectionWidget.generated.h"
 
 class UCharacterData;
-class UButton;
+class UCharacterSelectionButton;
 class UGridPanel;
 class UHorizontalBox;
 
+UENUM()
 enum class ESelectionType : uint8
 {
 	Player,
@@ -33,10 +34,10 @@ public:
 	UHorizontalBox* EnemyCharactersPanel;
 
 	UPROPERTY(VisibleAnywhere)
-	TArray<UButton*> UserButtons;
+	TArray<UCharacterSelectionButton*> UserButtons;
 
 	UPROPERTY(VisibleAnywhere)
-	TArray<UButton*> EnemyButtons;
+	TArray<UCharacterSelectionButton*> EnemyButtons;
 
 	virtual void NativeConstruct() override;
 	void OnLoadedCharacterAssets();
@@ -45,5 +46,11 @@ public:
 	void OnStartPlayTapped();
 
 private:
-	TArray<UButton*> CreateCharacterButtons(const ESelectionType Type) const;
+	UPROPERTY()
+	TMap<ESelectionType, UCharacterData*> Selections;
+	
+	TArray<UCharacterSelectionButton*> CreateCharacterButtons(const ESelectionType Type);
+
+	UFUNCTION()
+	void OnCharacterSelectionTapped(UCharacterSelectionButton* Button);
 };
