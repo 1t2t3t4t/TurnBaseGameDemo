@@ -19,18 +19,28 @@ void ATurnBaseDemoGameModeBase::BeginPlay()
 	UGameplayStatics::GetAllActorsWithTag(this, GEnemy_Position, EnemyPositions);
 
 	GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(true);
-
+	
 	SpawnCharacters();
 }
 
 void ATurnBaseDemoGameModeBase::SpawnCharacters() const
 {
-	if (Selections && Selections->GetSelections().Contains(ESelectionType::Player))
+	if (Selections)
 	{
-		const auto PlayerCharacter = Selections->GetSelections()[ESelectionType::Player];
-		const auto PlayerLocation = GetEmptyPlayerLocation();
-		const auto PlayerActor = GetWorld()->SpawnActor<ABaseCharacter>(PlayerLocation->GetActorLocation(), PlayerLocation->GetActorRotation());
-		PlayerActor->LoadCharacter(PlayerCharacter);
+		if (Selections->GetSelections().Contains(ESelectionType::Player))
+		{
+			const auto PlayerCharacter = Selections->GetSelections()[ESelectionType::Player];
+			const auto PlayerLocation = GetEmptyPlayerLocation();
+			const auto PlayerActor = GetWorld()->SpawnActor<ABaseCharacter>(PlayerLocation->GetActorLocation(), PlayerLocation->GetActorRotation());
+			PlayerActor->LoadCharacter(PlayerCharacter);
+		}
+		if (Selections->GetSelections().Contains(ESelectionType::Enemy))
+		{
+			const auto EnemyCharacter = Selections->GetSelections()[ESelectionType::Enemy];
+			const auto EnemyLocation = GetEmptyEnemyLocation();
+			const auto EnemyActor = GetWorld()->SpawnActor<ABaseCharacter>(EnemyLocation->GetActorLocation(), EnemyLocation->GetActorRotation());
+			EnemyActor->LoadCharacter(EnemyCharacter);
+		}
 	}
 }
 
