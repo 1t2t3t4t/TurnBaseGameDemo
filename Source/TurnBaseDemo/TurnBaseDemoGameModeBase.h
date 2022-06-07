@@ -27,6 +27,7 @@ public:
 	UCharacterSelection* Selections;
 
 	virtual void BeginPlay() override;
+	void SpawnCharacters() const;
 
 	static AActor* GetEmptyOwnerActor(TArray<AActor*> Actors);
 	UTurnBaseDemoGameInstance* GetTurnBaseGameInstance() const;
