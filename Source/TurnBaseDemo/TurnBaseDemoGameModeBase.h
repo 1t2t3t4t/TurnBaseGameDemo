@@ -26,6 +26,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UCharacterSelection* Selections;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UCharacterSelection> DefaultSelectionsClass;
+
 	virtual void BeginPlay() override;
 	void SpawnCharacters() const;
 

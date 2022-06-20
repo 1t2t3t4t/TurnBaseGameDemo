@@ -14,6 +14,11 @@ void ATurnBaseDemoGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 	Selections = GetTurnBaseGameInstance()->TakeCharacterSelection();
+	if (!Selections)
+	{
+		const auto DefaultSelections = NewObject<UCharacterSelection>(this, DefaultSelectionsClass);
+		Selections = DefaultSelections;
+	}
 	
 	UGameplayStatics::GetAllActorsWithTag(this, GPlayer_Position, PlayerPositions);
 	UGameplayStatics::GetAllActorsWithTag(this, GEnemy_Position, EnemyPositions);

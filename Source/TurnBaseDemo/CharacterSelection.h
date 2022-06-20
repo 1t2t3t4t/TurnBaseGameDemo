@@ -9,13 +9,13 @@
 
 class UCharacterData;
 
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, BlueprintType)
 class TURNBASEDEMO_API UCharacterSelection : public UObject
 {
 	GENERATED_BODY()
 
-private:
-	UPROPERTY(VisibleAnywhere)
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TMap<ESelectionType, UCharacterData*> Selections;
 	
 public:
