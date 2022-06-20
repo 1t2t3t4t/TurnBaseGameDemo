@@ -34,9 +34,15 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	void Transition(const FVector Target) const;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void TransitionBack() const;
+
+private:
+	UFUNCTION()
+	void OnLerpTransitionCompleted(bool bFirstRound);
 };

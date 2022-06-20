@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "LerpTransitionComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FTransitionCompletion);
+DECLARE_MULTICAST_DELEGATE_OneParam(FTransitionCompletion, bool);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class TURNBASEDEMO_API ULerpTransitionComponent : public UActorComponent
@@ -24,9 +24,11 @@ private:
 	float Progress = 0.0f;
 
 	UPROPERTY(EditDefaultsOnly)
-	float TransitionSpeed = 100;
+	float TransitionSpeed = 1;
 
 	bool bTransitioning = false;
+
+	bool bFirstRound = true;
 	
 public:
 	FTransitionCompletion OnCompleteTransition;
@@ -44,6 +46,8 @@ public:
 		StartPosition = GetOwner()->GetActorLocation();
 		bTransitioning = true;
 	}
+
+	void TransitionBack();
 
 protected:
 	// Called when the game starts

@@ -13,6 +13,16 @@ void ULerpTransitionComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ULerpTransitionComponent::TransitionBack()
+{
+	const auto TempPos = TargetPosition;
+	TargetPosition = StartPosition;
+	StartPosition = TempPos;
+	Progress = 0;
+	bTransitioning = true;
+	bFirstRound = false;
+}
+
 void ULerpTransitionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                              FActorComponentTickFunction* ThisTickFunction)
 {
@@ -27,7 +37,7 @@ void ULerpTransitionComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 		if (Progress == 1.0)
 		{
 			bTransitioning = false;
-			OnCompleteTransition.Broadcast();
+			OnCompleteTransition.Broadcast(bFirstRound);
 		}
 	}
 }

@@ -18,7 +18,8 @@ ABaseCharacter::ABaseCharacter()
 
 	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Skeletal Mesh"));
 	SkeletalMeshComponent->SetupAttachment(RootComponent);
-
+	SkeletalMeshComponent->SetRelativeRotation(FRotator(0.f, 270.f, 0.f));
+	
 	LerpTransitionComponent = CreateDefaultSubobject<ULerpTransitionComponent>(TEXT("Lerp Transition"));
 }
 
@@ -37,6 +38,13 @@ void ABaseCharacter::LoadCharacter(UCharacterData* CharacterData)
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	LerpTransitionComponent->OnCompleteTransition.AddUObject(this, &ABaseCharacter::OnLerpTransitionCompleted);
+}
+
+void ABaseCharacter::Transition(const FVector Target) const
+{
+	LerpTransitionComponent->SetTargetPosition(Target);
+	LerpTransitionComponent->SetStartTransition();
 }
 
 // Called every frame
@@ -49,5 +57,16 @@ void ABaseCharacter::Tick(float DeltaTime)
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void ABaseCharacter::TransitionBack() const
+{
+	LerpTransitionComponent->TransitionBack();
+}
+
+void ABaseCharacter::OnLerpTransitionCompleted(bool bFirstRound)
+{
+	FTimerHandle H;
+	GetWorld()->GetTimerManager().SetTimer(H, this, &ABaseCharacter::TransitionBack, 3.f);
 }
 
