@@ -12,12 +12,13 @@ class TURNBASEDEMO_API ABaseCharacter : public APawn
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	USkeletalMeshComponent* SkeletalMeshComponent;
+	
 private:
 	UPROPERTY(EditDefaultsOnly)
 	class UCapsuleComponent* CapsuleComponent;
-
-	UPROPERTY(EditDefaultsOnly)
-	USkeletalMeshComponent* SkeletalMeshComponent;
 
 	UPROPERTY(EditDefaultsOnly)
 	class ULerpTransitionComponent* LerpTransitionComponent;
