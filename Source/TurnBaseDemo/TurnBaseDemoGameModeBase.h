@@ -9,9 +9,10 @@
 #include "GameFramework/GameModeBase.h"
 #include "TurnBaseDemoGameModeBase.generated.h"
 
-/**
- * 
- */
+class UPlayerMasterController;
+class UAIMasterController;
+class IMasterController;
+
 UCLASS()
 class TURNBASEDEMO_API ATurnBaseDemoGameModeBase : public AGameModeBase
 {
@@ -38,6 +39,14 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category=Gameplay)
 	ABaseCharacter* CurrentCharacter;
+
+	UPROPERTY(VisibleAnywhere, Category=Gameplay)
+	UPlayerMasterController* PlayerMasterController;
+
+	UPROPERTY(VisibleAnywhere, Category=Gameplay)
+	UAIMasterController* AIMasterController;
+
+	IMasterController* CurrentController;
 	
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay)

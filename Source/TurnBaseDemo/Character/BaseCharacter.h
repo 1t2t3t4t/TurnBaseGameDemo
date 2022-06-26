@@ -54,7 +54,13 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void EnterTurn();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void BPEndTurn();
+	
+	void EndTurn();
+
 private:
+	
 	UFUNCTION()
 	void OnLerpTransitionCompleted(bool bFirstRound);
 };

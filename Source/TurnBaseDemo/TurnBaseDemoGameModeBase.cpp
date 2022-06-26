@@ -5,7 +5,9 @@
 
 #include "TurnBaseDemoGameInstance.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
+#include "Character/AIMasterController.h"
 #include "Character/BaseCharacter.h"
+#include "Character/PlayerMasterController.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/TurnBaseView.h"
@@ -16,6 +18,9 @@ const FName GEnemy_Position = TEXT("EnemyPosition");
 void ATurnBaseDemoGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
+	PlayerMasterController = NewObject<UPlayerMasterController>(this);
+	AIMasterController = NewObject<UAIMasterController>(this);
+
 	Selections = GetTurnBaseGameInstance()->TakeCharacterSelection();
 	if (!Selections)
 	{
@@ -104,8 +109,11 @@ void ATurnBaseDemoGameModeBase::SwitchTurn()
 	CharacterQueue.RemoveAt(0);
 	CurrentCharacter->EnterTurn();
 	CurrentCharacter->OnEndTurn.BindUObject(this, &ATurnBaseDemoGameModeBase::OnCharacterEndTurn);
-	TArray<UUserWidget*> TurnBaseWidgets; 
+	TArray<UUserWidget*> TurnBaseWidgets;
 	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, TurnBaseWidgets, UTurnBaseView::StaticClass());
+	CurrentController = CurrentCharacter->bIsPlayer
+		                    ? static_cast<IMasterController*>(PlayerMasterController)
+		                    : static_cast<IMasterController*>(AIMasterController);
 	if (TurnBaseWidgets.Num() > 0)
 	{
 		const bool bIsEnable = CurrentCharacter->bIsPlayer;
@@ -114,6 +122,7 @@ void ATurnBaseDemoGameModeBase::SwitchTurn()
 			Widget->SetIsEnabled(bIsEnable);
 		}
 	}
+	CurrentController->EnterTurn(CurrentCharacter);
 	CharacterQueue.Add(CurrentCharacter);
 }
 

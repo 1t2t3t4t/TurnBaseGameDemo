@@ -70,3 +70,8 @@ void ABaseCharacter::OnLerpTransitionCompleted(bool bFirstRound)
 	GetWorld()->GetTimerManager().SetTimer(H, this, &ABaseCharacter::TransitionBack, 3.f);
 }
 
+void ABaseCharacter::EndTurn()
+{
+	OnEndTurn.ExecuteIfBound(this);
+	BPEndTurn();
+}
