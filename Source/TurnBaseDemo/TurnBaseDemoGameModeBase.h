@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "CharacterSelection.h"
 #include "TurnBaseDemoGameInstance.h"
+#include "Character/BaseCharacter.h"
 #include "GameFramework/GameModeBase.h"
 #include "TurnBaseDemoGameModeBase.generated.h"
 
@@ -16,7 +17,7 @@ class TURNBASEDEMO_API ATurnBaseDemoGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-public:
+private:
 	UPROPERTY(VisibleAnywhere)
 	TArray<AActor*> PlayerPositions;
 
@@ -29,8 +30,23 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UCharacterSelection> DefaultSelectionsClass;
 
+	UPROPERTY(EditDefaultsOnly, Category=Template)
+	TSubclassOf<ABaseCharacter> CharacterClass;
+
+	UPROPERTY(VisibleAnywhere, Category=Gameplay)
+	TArray<ABaseCharacter*> CharacterQueue;
+
+	UPROPERTY(VisibleAnywhere, Category=Gameplay)
+	ABaseCharacter* CurrentCharacter;
+	
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay)
+	TArray<ABaseCharacter*> PlayerCharacters;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay)
+	TArray<ABaseCharacter*> EnemyCharacters;
+
 	virtual void BeginPlay() override;
-	void SpawnCharacters() const;
 
 	static AActor* GetEmptyOwnerActor(TArray<AActor*> Actors);
 	UTurnBaseDemoGameInstance* GetTurnBaseGameInstance() const;
@@ -44,4 +60,13 @@ public:
 	{
 		return GetEmptyOwnerActor(EnemyPositions);
 	}
+
+private:
+	void ConstructQueue();
+	void SpawnCharacters();
+	
+	ABaseCharacter* SpawnCharacterAt(UCharacterData* CharacterData, const AActor* Location,
+	                                 TArray<ABaseCharacter*>& Characters);
+	void SwitchTurn();
+	void OnCharacterEndTurn(ABaseCharacter* Character);
 };

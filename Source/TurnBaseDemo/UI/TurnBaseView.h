@@ -15,6 +15,16 @@ class TURNBASEDEMO_API UTurnBaseView : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION(BlueprintCallable)
+	void TapAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void TapDefence();
+
+	UFUNCTION(BlueprintCallable)
+	void TapSkill();
+	
 private:
 	void PerformAction() const;
 };

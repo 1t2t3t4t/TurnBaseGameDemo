@@ -7,12 +7,19 @@
 #include "GameFramework/Pawn.h"
 #include "BaseCharacter.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class TURNBASEDEMO_API ABaseCharacter : public APawn
 {
 	GENERATED_BODY()
 
+	DECLARE_DELEGATE_OneParam(FOnCharacterEndTurn, ABaseCharacter*);
+	
 public:
+	FOnCharacterEndTurn OnEndTurn;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bIsPlayer;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	USkeletalMeshComponent* SkeletalMeshComponent;
 	
@@ -24,24 +31,28 @@ private:
 	class ULerpTransitionComponent* LerpTransitionComponent;
 
 public:
-	// Sets default values for this pawn's properties
+	UCapsuleComponent* GetCapsuleComponent() const
+	{
+		return CapsuleComponent;
+	}
+	
 	ABaseCharacter();
 
 	UFUNCTION(BlueprintCallable)
 	void LoadCharacter(UCharacterData* CharacterData);
 	
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
 	void Transition(const FVector Target) const;
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void TransitionBack() const;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EnterTurn();
 
 private:
 	UFUNCTION()
